@@ -32,11 +32,15 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    // Add this for Google Play Services (Location)
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.material:material:1.9.0") // Or latest version
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

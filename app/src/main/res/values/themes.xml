@@ -1,9 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme with Material 3 NoActionBar -->
     <style name="Base.Theme.Timer_java" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Set custom primary colors -->
+        <item name="colorPrimary">@android:color/white</item> <!-- Change to your preferred color -->
+        <item name="colorPrimaryVariant">@android:color/white</item>
+
+        <!-- Make the status bar transparent or set to another color -->
+        <item name="android:statusBarColor">@android:color/transparent</item> <!-- Transparent status bar -->
+        <item name="android:windowLightStatusBar">true</item> <!-- Ensures icons are visible on light background -->
+
+        <!-- Optional: Change navigation bar color -->
+        <item name="android:navigationBarColor">@android:color/white</item> <!-- Change to your preferred color -->
     </style>
 
+    <!-- Application theme extending base theme -->
     <style name="Theme.Timer_java" parent="Base.Theme.Timer_java" />
 </resources>
