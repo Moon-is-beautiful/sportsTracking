@@ -54,9 +54,17 @@ def login():
 
 
 # Function that will get the routes located in our database and load it into the front-end
-@app.route()
-def getRoutes():
-	
+@app.route("/getFootballRoute", methods = ["GET"])
+def get_football_route():
+	route_name = request.args.get('routeName') # getting the slant route data
+	if not route_name:
+		return jsonify({"error": "routeName parameter is required"}), 400
+
+	route_data = database.getFootballRouteData(route_name)
+	if route_data:
+		return jsonify(route_data), 200
+	else:
+		return jsonify({"error": "Route not found"}), 404
 
 
 # Function that will pull more information from a specific route in the database and then return info to the front-end

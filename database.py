@@ -86,6 +86,28 @@ def updatePlay(name, play_number, new_time, new_x, new_y):
     print(f"Updated Play {play_number} with time: {new_time}, x: {new_x}, y: {new_y}.")
 
 
+# Get the ideal football route data
+def getFootballRouteData(route_name):
+	db = client['FootballRoutes']
+	collection = db[route_name]
+
+	# Fetch the documents
+	data_doc = collection.find_one({"Time": {"$exists": True}})
+	info_doc = collection.find_one({"Description": {"$exists": True}})
+	
+	if data_doc and info_doc:
+		route_data = {
+			"time": data_doc.get("Time", []),
+			"xCoordinates": data_doc.get("x-coordinates", []),
+			"yCoordinates": data_doc.get("y-coordinates", []),
+			"description": info_doc.get("Description", ""),
+			"additionalInformation": info_doc.get("Additional Information", "")
+		}
+		return route_data
+	else: 
+		return None
+				
+
 # Testing getNextPlayName, createPlay, and updatePlay:
 # Step 1: Create a Play collection in the "Test1" database
 createPlay("Test1")  # This will create "Play 1" with empty arrays
