@@ -31,7 +31,7 @@ def createAccount():
 	username = cipher.encrypt(username, 3, 2) # encrypt the username
 	password = cipher.encripy(password, 4, 2) # encrypt the password
 
-	database.createUser(name, userID, password) # put the user in our database
+	database.createUser(name, username, password) # put the user in our database
 	
 	return 'Done', 201 # postman to check route integrity
 
@@ -41,13 +41,15 @@ def createAccount():
 @app.route("/login", methods=["POST"])
 def login():
 	userInfo = request.get_json()
+
+	name = userInfo['name']
 	username = userInfo['loginUsername'] 
 	password = userInfo['loginPassword']
 	
 	username = cipher.encrypt(username, 3, 2)
 	password = cipher.encrypt(username, 4, 2)
 	
-	authentication = database.authenticateLogin(username, password)
+	authentication = database.authenticateLogin(name, username, password)
 	return jsonify({"authentication": authentication})
 
 
