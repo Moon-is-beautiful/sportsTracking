@@ -29,7 +29,7 @@ def createAccount():
 	
 	#might change so that database uses the cipher.py functions instead of app.py
 	username = cipher.encrypt(username, 3, 2) # encrypt the username
-	password = cipher.encripy(password, 4, 2) # encrypt the password
+	password = cipher.encrypt(password, 4, 2) # encrypt the password
 
 	database.createUser(name, username, password) # put the user in our database
 	
@@ -47,7 +47,7 @@ def login():
 	password = userInfo['loginPassword']
 	
 	username = cipher.encrypt(username, 3, 2)
-	password = cipher.encrypt(username, 4, 2)
+	password = cipher.encrypt(password, 4, 2)
 	
 	authentication = database.authenticateLogin(name, username, password)
 	return jsonify({"authentication": authentication})
