@@ -25,15 +25,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private ApiService apiService;
     private TextView timerTextView, gpsTextView;
     private Button startButton;
     private boolean timerRunning = false;
-    private long startTimeInMillis;  // Used to store the starting time
-    private Handler handler = new Handler();  // Handler for updating the UI every second
+    private long startTimeInMillis; // Used to store the starting time
+    private Handler handler = new Handler(); // Handler for updating the UI every second
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
@@ -41,20 +40,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5000/")  //url for testing on emulator
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-        apiService = retrofit.create(ApiService.class);
-
 
         // Find views
         timerTextView = findViewById(R.id.timerTextView);
         gpsTextView = findViewById(R.id.GPSTextView);
         startButton = findViewById(R.id.startButton);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:5000/") // url for testing on emulator
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        apiService = retrofit.create(ApiService.class);
 
         // Initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -80,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetTimer() {
-        handler.removeCallbacks(timerRunnable);  // Stop the handler
+        handler.removeCallbacks(timerRunnable); // Stop the handler
         timerRunning = false;
         startButton.setText("Start");
         gpsTextView.setText("GPS Data");
-        startTimeInMillis=0;
+        startTimeInMillis = 0;
         // Reset timer to 00:00:00
         timerTextView.setText("00:00:00");
     }
@@ -92,9 +89,10 @@ public class MainActivity extends AppCompatActivity {
     // Start the timer and fetch GPS data (combined method)
     private void startTracking() {
         // Check for location permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             // Start timer and fetch GPS data
             fetchLocationAndStartTimer();
@@ -111,12 +109,16 @@ public class MainActivity extends AppCompatActivity {
                     String gpsData = "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude();
                     gpsTextView.setText(gpsData);
 
+                    // data type is long instead of double in the database
+                    long elapsedTimeInMillis = System.currentTimeMillis() - startTimeInMillis;
+                    long elapsedSeconds = elapsedTimeInMillis / 1000;
+
                     // Send data to back-end
-                    String timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()).format(new Date());
-                    TrackingData trackingData = new TrackingData(timestamp, location.getLatitude(), location.getLongitude());
+                    TrackingData trackingData = new TrackingData(elapsedSeconds, location.getLatitude(),
+                            location.getLongitude());
+
                     sendTrackingDataToBackend(trackingData);
-                } 
-                else {
+                } else {
                     gpsTextView.setText("Unable to fetch location");
                 }
             }
@@ -130,10 +132,11 @@ public class MainActivity extends AppCompatActivity {
         startButton.setText("Pause");
     }
 
-    // send gps data to the backend -> currently called when start is pressed on timer
+    // send gps data to the backend -> currently called when start is pressed on
+    // timer
     private void sendTrackingDataToBackend(TrackingData trackingData) {
         Call<Void> call = apiService.sendTrackingData(trackingData);
-    
+
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Failed to send data", Toast.LENGTH_SHORT).show();
                 }
             }
-    
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // Handle network error
@@ -160,13 +163,13 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             long elapsedTime = System.currentTimeMillis() - startTimeInMillis;
             updateTimerText(elapsedTime);
-            handler.postDelayed(this, 1000);  // Update every 1 second
+            handler.postDelayed(this, 1000); // Update every 1 second
         }
     };
 
     // Pause the timer
     private void pauseTimer() {
-        handler.removeCallbacks(timerRunnable);  // Stop updating the timer
+        handler.removeCallbacks(timerRunnable); // Stop updating the timer
         timerRunning = false;
         startButton.setText("Start");
         gpsTextView.setText("Stopped Tracking");
@@ -184,7 +187,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Handle permission result
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

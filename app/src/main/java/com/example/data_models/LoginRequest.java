@@ -1,3 +1,5 @@
+package com.example.timer_java;
+
 public class LoginRequest{
 	private String name;
 	private String loginUsername;
