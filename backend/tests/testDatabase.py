@@ -38,5 +38,3 @@ update_play_test(user1, 1, 50, 100)
 update_play_test(user1, 1, 150, 200)
 update_play_test(user1, 2, 60, 110)
 authenticate_login_test(user1)
-
-
