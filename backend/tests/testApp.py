@@ -1,12 +1,7 @@
-import sys
 import unittest
 import json
-from app import app
-import database
-import cipher
-
-# Add the parent directory to the system path
-sys.path.append("..")
+from backend.backend_app import app
+from backend import database
 
 
 class TestApp(unittest.TestCase):

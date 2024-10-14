@@ -44,4 +44,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    dependencies {
+    // Other dependencies...
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Converter for JSON parsing
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Gson for JSON serialization/deserialization
+    implementation("com.google.code.gson:gson:2.8.9")
+
+    // OkHttp for logging (optional but helpful for debugging)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+}
+
 }
