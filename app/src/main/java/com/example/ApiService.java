@@ -1,4 +1,6 @@
-package com.example.timer_java;
+package com.example;
+
+import com.example.data_models.*;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

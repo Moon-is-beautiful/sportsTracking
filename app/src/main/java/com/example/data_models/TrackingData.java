@@ -1,4 +1,4 @@
-package com.example.timer_java;
+package com.example.data_models;
 
 public class TrackingData {
     private long timestamp;
@@ -6,14 +6,14 @@ public class TrackingData {
     private double longitude;
 
     // Constructors
-    public TrackingData(String timestamp, double latitude, double longitude) {
+    public TrackingData(long timestamp, double latitude, double longitude) {
         this.timestamp = timestamp;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
     // Getters and setters
-    public String getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
