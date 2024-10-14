@@ -75,8 +75,24 @@ def get_football_route():
 #
 #
 # # Function that will start the route for practice and start collecting location info from the phone
-# @app.route()
-# def startRoute():
+@app.route("/startRoute", methods = ["POST"])
+def startRoute():
+    data = request.get_json()
+    
+    # get data from the request
+    time = data.get('timestamp')
+    x = data.get('longitude')
+    y = data.get('latitude')
+
+    if not all([time is not None, x, y]):
+        return jsonify({"error": "Missing data"}), 400
+    
+    # need to update the database createplay function to return the play number that it created
+    # right now hard coding name but eventually we'll be pulling the name of the person
+    database.createPlay("Jack")
+    database.updatePlay("Jack", 1, time, x, y)
+
+    return jsonify({"message": "Data received successfully"}), 200
 
 
 if __name__ == '__main__':

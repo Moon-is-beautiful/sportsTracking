@@ -1,3 +1,5 @@
+package com.example.timer_java;
+
 public class FootballRoute {
 	// class that is equivalent to the datamodel in mongoDB for football routes
 	private List<Double> time;

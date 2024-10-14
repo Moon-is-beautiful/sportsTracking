@@ -1,3 +1,5 @@
+package com.example.timer_java;
+
 public class User {
 	private String name;
 	private String username;

@@ -1,7 +1,7 @@
 package com.example.timer_java;
 
 public class TrackingData {
-    private String timestamp;
+    private long timestamp;
     private double latitude;
     private double longitude;
 
