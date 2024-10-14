@@ -15,9 +15,20 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import android.widget.Toast;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
 
+    private ApiService apiService;
     private TextView timerTextView, gpsTextView;
     private Button startButton;
     private boolean timerRunning = false;
@@ -30,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+
+        Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:5000/")  //url for testing on emulator
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+        apiService = retrofit.create(ApiService.class);
+
 
         // Find views
         timerTextView = findViewById(R.id.timerTextView);
@@ -90,7 +110,13 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     String gpsData = "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude();
                     gpsTextView.setText(gpsData);
-                } else {
+
+                    // Send data to back-end
+                    String timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()).format(new Date());
+                    TrackingData trackingData = new TrackingData(timestamp, location.getLatitude(), location.getLongitude());
+                    sendTrackingDataToBackend(trackingData);
+                } 
+                else {
                     gpsTextView.setText("Unable to fetch location");
                 }
             }
@@ -102,6 +128,30 @@ public class MainActivity extends AppCompatActivity {
 
         timerRunning = true;
         startButton.setText("Pause");
+    }
+
+    // send gps data to the backend -> currently called when start is pressed on timer
+    private void sendTrackingDataToBackend(TrackingData trackingData) {
+        Call<Void> call = apiService.sendTrackingData(trackingData);
+    
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Data sent successfully
+                    Toast.makeText(MainActivity.this, "Data sent to server", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle error
+                    Toast.makeText(MainActivity.this, "Failed to send data", Toast.LENGTH_SHORT).show();
+                }
+            }
+    
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle network error
+                Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Runnable for updating the timer every second
