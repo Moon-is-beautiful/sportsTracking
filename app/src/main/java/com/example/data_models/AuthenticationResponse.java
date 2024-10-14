@@ -1,4 +1,4 @@
-package com.example.timer_java;
+package com.example.data_models;
 
 public class AuthenticationResponse{
 	private boolean authentication;
