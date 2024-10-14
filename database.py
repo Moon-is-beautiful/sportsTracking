@@ -62,7 +62,7 @@ def createPlay(name):
     play_collection = personDB[play_collection_name]
 
     # Initialize a single document with empty arrays for time, x-coordinate, and y-coordinate
-    play_collection.insert_one({"time": [], "x-coordinate": [], "y-coordinate": []})
+    play_collection.insert_one({"Time": [], "x-coordinate": [], "y-coordinate": []})
     print(f"Collection '{play_collection_name}' created under the database '{name}'.")
 
 
