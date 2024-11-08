@@ -11,8 +11,8 @@ import okhttp3.ResponseBody;
 
 
 public interface ApiService{
-	@POST("/createaccount")
-	Call<ResponseBody> createAccount(@Body User user);
+	@POST("/createAccount")
+	Call<AuthenticationResponse> createAccount(@Body LoginRequest createAccountRequest);
 
 	
 	@POST("/login")
