@@ -1,26 +1,26 @@
 package com.example;
 
 import com.example.data_models.*;
-
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Body;
 import retrofit2.http.Query;
-import okhttp3.ResponseBody;
 
+public interface ApiService {
+  @POST("/createaccount")
+  Call<ResponseBody> createAccount(@Body User user);
 
-public interface ApiService{
-	@POST("/createaccount")
-	Call<ResponseBody> createAccount(@Body User user);
+  @POST("/login")
+  Call<AuthenticationResponse> login(@Body LoginRequest loginRequest);
 
-	
-	@POST("/login")
-	Call<AuthenticationResponse> login(@Body LoginRequest loginRequest);
-	
-	@GET("/getFootballRoute")
-	Call<FootballRoute> getFootballRoute(@Query("routeName") String routeName);
-	
-	@POST("/startRoute")
-	Call<Void> sendTrackingData(@Body TrackingData data);
+  @GET("/getFootballRoute")
+  Call<FootballRoute> getFootballRoute(@Query("routeName") String routeName);
+
+  @POST("/startRoute")
+  Call<Void> sendTrackingData(@Body TrackingData data);
+
+  @POST("/calculateAccuracy")
+  Call<CalculateAccuracyResponse> calculateAccuracy(@Body CalculateAccuracyRequest request);
 }

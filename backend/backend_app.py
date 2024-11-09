@@ -1,8 +1,9 @@
-from flask import Flask, send_from_directory, request, jsonify
-from flask_cors import CORS
 import os
-from backend import cipher
-from backend import database
+
+from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
+
+from backend import cipher, comparison, database
 
 # Static folder holds the built React app directory
 app = Flask(__name__, static_folder="build", static_url_path="")
@@ -19,13 +20,13 @@ def home():
 
 # Function that gets triggered when API for creating account is called
 # takes information from the front-end and store it in the backend. Will call cipher.py to encrypt password and username
-@app.route("/createaccount", methods=["POST"])
+@app.route("/createAccount", methods=["POST"])
 def createAccount():
     newUserInfo = request.get_json()  # parse incoming json request data and return it
 
-    name = newUserInfo['name']  # get the information from the key name
-    password = newUserInfo['password']  # get the information from the key password
-    username = newUserInfo['username']  # get the information from the key username
+    name = newUserInfo["name"]  # get the information from the key name
+    password = newUserInfo["password"]  # get the information from the key password
+    username = newUserInfo["username"]  # get the information from the key username
 
     # might change so that database uses the cipher.py functions instead of backend_app.py
     # username = cipher.encrypt(username, 3, 2) # encrypt the username
@@ -33,7 +34,7 @@ def createAccount():
 
     database.createUser(name, username, password)  # put the user in our database
 
-    return 'Done', 201  # postman to check route integrity
+    return "Done", 201  # postman to check route integrity
 
 
 # Function that triggers when API for logging in gets called
@@ -42,9 +43,9 @@ def createAccount():
 def login():
     userInfo = request.get_json()
 
-    name = userInfo['name']
-    username = userInfo['loginUsername']
-    password = userInfo['loginPassword']
+    name = userInfo["name"]
+    username = userInfo["loginUsername"]
+    password = userInfo["loginPassword"]
 
     # right now deciding not to encrypt username
     # username = cipher.encrypt_user_id(username)
@@ -57,7 +58,7 @@ def login():
 # Function that will get the routes located in our database and load it into the front-end
 @app.route("/getFootballRoute", methods=["GET"])
 def get_football_route():
-    route_name = request.args.get('routeName')  # getting the slant route data
+    route_name = request.args.get("routeName")  # getting the slant route data
     if not route_name:
         return jsonify({"error": "routeName parameter is required"}), 400
 
@@ -75,18 +76,18 @@ def get_football_route():
 #
 #
 # # Function that will start the route for practice and start collecting location info from the phone
-@app.route("/startRoute", methods = ["POST"])
+@app.route("/startRoute", methods=["POST"])
 def startRoute():
     data = request.get_json()
-    
+
     # get data from the request
-    time = data.get('timestamp')
-    x = data.get('longitude')
-    y = data.get('latitude')
+    time = data.get("timestamp")
+    x = data.get("longitude")
+    y = data.get("latitude")
 
     if not all([time is not None, x, y]):
         return jsonify({"error": "Missing data"}), 400
-    
+
     # need to update the database createplay function to return the play number that it created
     # right now hard coding name but eventually we'll be pulling the name of the person
     database.createPlay("Jack")
@@ -95,5 +96,29 @@ def startRoute():
     return jsonify({"message": "Data received successfully"}), 200
 
 
-if __name__ == '__main__':
+@app.route("/calculateAccuracy", methods=["POST"])
+def calculateAccuracy():
+    # need to get the data document holding all the location information from the front-end
+    data = request.get_json()
+
+    route_name = data.get("route name")
+
+    # need to separate the data into two lists: x-coordinates and y-coordinates
+    user_x_coordinates = data.get("x-coordinates", [])
+    user_y_coordinates = data.get("y-coordinates", [])
+    # need to get the ideal location from the back-end
+    routeData = database.getFootballRouteData(route_name)
+    if not routeData:
+        return jsonify({"error": f"No data found for route '{route_name}'"}), 404
+
+    ideal_x_coordinates = routeData.get("x-coordinates", [])
+    ideal_y_coordinates = routeData.get("y-coordinates", [])
+    # need to call the Compare Function
+    score = comparison.compareRoutes(
+        user_x_coordinates, user_y_coordinates, ideal_x_coordinates, ideal_y_coordinates
+    )
+    return jsonify({"Accuracy Score": score}), 200
+
+
+if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=False, port=os.environ.get("PORT", 80))
