@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
+    private TrackingData trackingData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         timerTextView = findViewById(R.id.timerTextView);
         gpsTextView = findViewById(R.id.GPSTextView);
         startButton = findViewById(R.id.startButton);
+
+        //initialize trackingData to store x, y, and time coordinates
+        trackingData = new TrackingData();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:5000/") // url for testing on emulator
@@ -113,11 +118,8 @@ public class MainActivity extends AppCompatActivity {
                     long elapsedTimeInMillis = System.currentTimeMillis() - startTimeInMillis;
                     long elapsedSeconds = elapsedTimeInMillis / 1000;
 
-                    // Send data to back-end
-                    TrackingData trackingData = new TrackingData(elapsedSeconds, location.getLatitude(),
-                            location.getLongitude());
-
-                    sendTrackingDataToBackend(trackingData);
+                    // Store data into front-end -> i.e.) add to trackingData data model
+                    trackingData.addData(elapsedTimeInMillis, location.getLongitude(), location.getLatitude());
                 } else {
                     gpsTextView.setText("Unable to fetch location");
                 }
@@ -132,10 +134,9 @@ public class MainActivity extends AppCompatActivity {
         startButton.setText("Pause");
     }
 
-    // send gps data to the backend -> currently called when start is pressed on
-    // timer
-    private void sendTrackingDataToBackend(TrackingData trackingData) {
-        Call<Void> call = apiService.sendTrackingData(trackingData);
+    // Send GPS data to the backend -> called on 'comparison' button being pressed 
+    private void sendTrackingDataToBackend() {
+        Call<Void> call = apiService.sendTrackingData(this.trackingData);
 
         call.enqueue(new Callback<Void>() {
             @Override
