@@ -95,8 +95,8 @@ def getFootballRouteData(route_name):
     if data_doc and info_doc:
         route_data = {
             "time": data_doc.get("Time", []),
-            "xCoordinates": data_doc.get("x-coordinates", []),
-            "yCoordinates": data_doc.get("y-coordinates", []),
+            "x-coordinates": data_doc.get("x-coordinates", []),
+            "y-coordinates": data_doc.get("y-coordinates", []),
             "description": info_doc.get("Description", ""),
             "additionalInformation": info_doc.get("Additional Information", ""),
         }
