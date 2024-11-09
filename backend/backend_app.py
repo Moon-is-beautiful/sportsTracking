@@ -82,8 +82,8 @@ def startRoute():
 
     # get data from the request
     time = data.get("timestamp")
-    x = data.get("longitude")
-    y = data.get("latitude")
+    x = data.get("x_coordinates")
+    y = data.get("y_coordinates")
 
     if not all([time is not None, x, y]):
         return jsonify({"error": "Missing data"}), 400
