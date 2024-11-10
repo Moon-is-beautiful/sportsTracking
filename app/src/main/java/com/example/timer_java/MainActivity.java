@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
   private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
   private TrackingData trackingData;
+  private String FootBallRoute;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                       //@TODO might be a better way of implementing this ~ could also cause problems
                       if(!compareClicked){
                           sendTrackingDataToBackend();
+                          CalculateAccuracyResponse data = getAccuracy();
                       }
                   }
               }
@@ -205,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
   // Send GPS data to the backend -> called on 'comparison' button being pressed
   private void sendTrackingDataToBackend() {
     Call<Void> call = apiService.sendTrackingData(this.trackingData);
-
     call.enqueue(
         new Callback<Void>() {
           @Override
@@ -220,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
             }
           }
 
+
+
           @Override
           public void onFailure(Call<Void> call, Throwable t) {
             // Handle network error
@@ -228,6 +231,49 @@ public class MainActivity extends AppCompatActivity {
                 .show();
           }
         });
+  }
+
+  private void getAccuracy() {
+    // Ensure FootBallRoute is set
+    if (FootBallRoute == null || FootBallRoute.isEmpty()) {
+      Toast.makeText(this, "Football Route not set", Toast.LENGTH_SHORT).show();
+      return;
+    }
+
+    // Create the CalculateAccuracyRequest object
+    CalculateAccuracyRequest accuracyRequest = new CalculateAccuracyRequest(
+            FootBallRoute,
+            trackingData.getX_coordinates(),
+            trackingData.getY_coordinates()
+    );
+
+    // Make the Retrofit call
+    Call<CalculateAccuracyResponse> call = apiService.calculateAccuracy(accuracyRequest);
+    call.enqueue(new Callback<CalculateAccuracyResponse>() {
+      @Override
+      public void onResponse(Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
+        if (response.isSuccessful() && response.body() != null) {
+          double accuracyScore = response.body().getAccuracyScore(); // Ensure this getter exists
+          // Display the accuracy score to the user
+          Toast.makeText(MainActivity.this, "Accuracy Score: " + accuracyScore, Toast.LENGTH_LONG).show();
+
+          // Optionally, update a TextView dedicated to showing accuracy
+          // accuracyTextView.setText("Accuracy Score: " + accuracyScore);
+
+          // Update the compareClicked flag
+          compareClicked = true;
+        } else {
+          // Handle unsuccessful responses
+          Toast.makeText(MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<CalculateAccuracyResponse> call, Throwable t) {
+        // Handle network or conversion errors
+        Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 
   // Runnable for updating the timer every second

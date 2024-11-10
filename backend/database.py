@@ -161,6 +161,21 @@ def updateAccuracy(name, Accuracy):
     )
 
 
+# Retrieve user information upon sign-in
+def getUserInfo(name, username):
+    personDB = client[name]
+    accountInfo = personDB["Account Information"]
+
+    # Find the user document with the provided username
+    user_doc = accountInfo.find_one({"username": username})
+
+    if user_doc:
+        return {"name": name, "username": user_doc.get("username")}
+    else:
+        print(f"User '{username}' not found in the database '{name}'.")
+        return None
+
+
 # Delete a collection
 def deleteCollection(name, collection_name):
     personDB = client[name]
