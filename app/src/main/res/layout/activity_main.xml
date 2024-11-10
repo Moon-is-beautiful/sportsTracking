@@ -22,6 +22,7 @@
         android:text="00:00:00" />
 
     <LinearLayout
+        android:id="@+id/startStopLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/timerTextView"
@@ -46,6 +47,22 @@
             android:text="Reset"
             app:cornerRadius="0dp"/>
 
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/compareLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startStopLine"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/compareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/BurntOrange"
+            android:text="Start"
+            app:cornerRadius="0dp"/>
     </LinearLayout>
 
 </RelativeLayout>
