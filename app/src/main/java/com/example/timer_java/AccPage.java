@@ -12,11 +12,14 @@ import androidx.annotation.Nullable;
 public class AccPage extends Activity {
     Button btn2, btn3, btn4;
     TextView tv_Output;
+    TextView accuracyOutput;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acc_page_layout);
+        Intent intent = getIntent();
+        String accuracy = "placeholder";//intent.getStringExtra("accuracy");
 
 
         btn2 = (Button)findViewById(R.id.backButton);
@@ -24,6 +27,8 @@ public class AccPage extends Activity {
         btn4 = (Button)findViewById(R.id.reportButton);
 
         tv_Output = (TextView)findViewById(R.id.outputLabel);
+        accuracyOutput=(TextView)findViewById(R.id.percentAccuracy);
+        accuracyOutput.setText(accuracy);
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override

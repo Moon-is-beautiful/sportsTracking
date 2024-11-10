@@ -1,6 +1,7 @@
 package com.example.timer_java;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    FootBallRoute = getIntent().getStringExtra("FootBallRoute");
 
     // Find views
     timerTextView = findViewById(R.id.timerTextView);
@@ -132,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
                       if(!compareClicked){
                           sendTrackingDataToBackend();
                           getAccuracy();
+                          Intent intent = new Intent(MainActivity.this, AccPage.class);
+                          //intent.putExtra("accuracy", accuracyResponse.getAccuracyScore());
+                          startActivity(intent);
                       }
                   }
               }
