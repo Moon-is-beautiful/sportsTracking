@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
   private Button startButton;
   private Button compareButton;
   private Button resetButton;
-  private boolean compareClicked = false;
+  private boolean compareClicked = false; //@TODO potential bug in functionality ~ might only be able to record one practice play
 
     private boolean timerRunning = false;
   private long startTimeInMillis; // Used to store the starting time
