@@ -166,8 +166,6 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-
     // Fetch location and start the timer
     // Start the timer
     private void startTimer() {
@@ -177,49 +175,6 @@ public class MainActivity extends AppCompatActivity {
         startButton.setText("Pause");
         gpsTextView.setText("Tracking..."); //@TODO replace with the GPS data
     }
-
-
-//  private void fetchLocationAndStartTimer() {
-//    // Fetch GPS data
-//      if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//          // TODO: Consider calling
-//          //    ActivityCompat#requestPermissions
-//          // here to request the missing permissions, and then overriding
-//          //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//          //                                          int[] grantResults)
-//          // to handle the case where the user grants the permission. See the documentation
-//          // for ActivityCompat#requestPermissions for more details.
-//          return;
-//      }
-//      fusedLocationClient
-//        .getLastLocation()
-//        .addOnSuccessListener(
-//            this,
-//                location -> {
-//                  if (location != null) {
-//                    String gpsData =
-//                        "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude();
-//                    gpsTextView.setText(gpsData);
-//
-//                    // data type is long instead of double in the database
-//                    long elapsedTimeInMillis = System.currentTimeMillis() - startTimeInMillis;
-//                    long elapsedSeconds = elapsedTimeInMillis / 1000;
-//
-//                    // Store data into front-end -> i.e.) add to trackingData data model
-//                    trackingData.addData(
-//                        elapsedTimeInMillis, location.getLongitude(), location.getLatitude());
-//                  } else {
-//                    gpsTextView.setText("Unable to fetch location");
-//                  }
-//                });
-//
-//    // Start the count-up timer
-//    startTimeInMillis = System.currentTimeMillis();
-//    handler.postDelayed(timerRunnable, 0);
-//
-//    timerRunning = true;
-//    startButton.setText("Pause");
-//  }
 
   // Send GPS data to the backend -> called on 'comparison' button being pressed
   private void sendTrackingDataToBackend() {
@@ -270,9 +225,6 @@ public class MainActivity extends AppCompatActivity {
       fusedLocationClient.removeLocationUpdates(locationCallback);
 
       gpsTextView.setText("Tracking Paused");
-
-      // Optionally, send trackingData to the backend here
-      // sendTrackingDataToBackend();
   }
 
 
@@ -289,14 +241,16 @@ public class MainActivity extends AppCompatActivity {
   // Handle permission result
   @Override
   public void onRequestPermissionsResult(
-      int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-      if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        fetchLocationAndStartTimer(); // Permission granted, start tracking
-      } else {
-        gpsTextView.setText("Location permission denied");
+          int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+      if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+          if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+              startTracking(); // Permission granted, start tracking
+          } else {
+              gpsTextView.setText("Location permission denied");
+              Toast.makeText(this, "Location permission is required to track your route.", Toast.LENGTH_SHORT).show();
+          }
       }
-    }
   }
+
 }

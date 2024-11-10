@@ -34,4 +34,10 @@ public class TrackingData {
     x_coordinates.add(x);
     y_coordinates.add(y);
   }
+
+  public void clearData() {
+    timestamp.clear();
+    x_coordinates.clear();
+    y_coordinates.clear();
+  }
 }
