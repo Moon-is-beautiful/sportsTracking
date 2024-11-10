@@ -12,6 +12,8 @@ import com.example.data_models.*;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,6 +28,14 @@ public class LoginActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Retrofit retrofit =
+            new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:5000/") // url for testing on emulator
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+    apiService = retrofit.create(ApiService.class);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login); // Use the layout for the login screen
 
