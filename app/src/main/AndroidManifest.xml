@@ -18,7 +18,7 @@
 
         <!-- OptionsPage activity -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,16 +26,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OptionsPage"
+            android:name=".MainActivity"
             android:exported="true" />
 
         <!-- MainActivity declaration -->
         <activity
-            android:name=".MainActivity"
+            android:name=".AccPage"
             android:exported="true" />
 
         <activity
-            android:name=".AccPage"
+            android:name=".LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".OptionsPage"
             android:exported="true" />
 
     </application>
