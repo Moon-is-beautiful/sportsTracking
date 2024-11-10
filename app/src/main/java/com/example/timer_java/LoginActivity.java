@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             verifyLogin(loginInfo);
 
             // If login is successful, redirect to MainActivity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
             startActivity(intent);
             finish(); // Close the login activity so the user cannot return to it
           }
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             createAccount(newUserInfo);
 
             // If login is successful, redirect to MainActivity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
             startActivity(intent);
             finish(); // Close the login activity so the user cannot return to it
           }
@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
               Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
               // Redirect to MainActivity
-              Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
               startActivity(intent);
               finish(); // Close the login activity
             } else {
@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
               Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
               // Redirect to MainActivity
-              Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
               startActivity(intent);
               finish(); // Close the login activity
             } else {
