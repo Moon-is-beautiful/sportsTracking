@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
   private Button compareButton;
   private Button resetButton;
   private boolean compareClicked = false; //@TODO potential bug in functionality ~ might only be able to record one practice play
-
+  private CalculateAccuracyResponse accuracyResponse;
     private boolean timerRunning = false;
   private long startTimeInMillis; // Used to store the starting time
   private Handler handler = new Handler(); // Handler for updating the UI every second
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                       //@TODO might be a better way of implementing this ~ could also cause problems
                       if(!compareClicked){
                           sendTrackingDataToBackend();
-                          CalculateAccuracyResponse data = getAccuracy();
+                          getAccuracy();
                       }
                   }
               }
@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
     // Ensure FootBallRoute is set
     if (FootBallRoute == null || FootBallRoute.isEmpty()) {
       Toast.makeText(this, "Football Route not set", Toast.LENGTH_SHORT).show();
-      return;
     }
 
     // Create the CalculateAccuracyRequest object
@@ -254,14 +253,9 @@ public class MainActivity extends AppCompatActivity {
       public void onResponse(Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
         if (response.isSuccessful() && response.body() != null) {
           double accuracyScore = response.body().getAccuracyScore(); // Ensure this getter exists
-          // Display the accuracy score to the user
-          Toast.makeText(MainActivity.this, "Accuracy Score: " + accuracyScore, Toast.LENGTH_LONG).show();
-
-          // Optionally, update a TextView dedicated to showing accuracy
-          // accuracyTextView.setText("Accuracy Score: " + accuracyScore);
-
           // Update the compareClicked flag
           compareClicked = true;
+          accuracyResponse = new CalculateAccuracyResponse(accuracyScore);
         } else {
           // Handle unsuccessful responses
           Toast.makeText(MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT).show();
