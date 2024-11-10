@@ -35,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
   private Button startButton;
   private Button compareButton;
   private Button resetButton;
-  private boolean compareClicked = false; //@TODO potential bug in functionality ~ might only be able to record one practice play
+  private boolean compareClicked =
+      false; // @TODO potential bug in functionality ~ might only be able to record one
+  // practice
+  // play
   private CalculateAccuracyResponse accuracyResponse;
-    private boolean timerRunning = false;
+  private boolean timerRunning = false;
   private long startTimeInMillis; // Used to store the starting time
   private Handler handler = new Handler(); // Handler for updating the UI every second
   private FusedLocationProviderClient fusedLocationClient;
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     compareButton = findViewById(R.id.compareButton);
     resetButton = findViewById(R.id.resetButton);
 
-      // initialize trackingData to store x, y, and time coordinates
+    // initialize trackingData to store x, y, and time coordinates
     trackingData = new TrackingData();
 
     Retrofit retrofit =
@@ -122,22 +125,22 @@ public class MainActivity extends AppCompatActivity {
             resetTimer();
           }
         });
-      // Listener for compareButton
-      compareButton.setOnClickListener(
-              new View.OnClickListener(){
-                  @Override
-                  public void onClick(View v){
-                      //if compare button pressed already then don't send data to the backend ~ Compare button changes onSuccessfulResponse
-                      //@TODO might be a better way of implementing this ~ could also cause problems
-                      if(!compareClicked){
-                          sendTrackingDataToBackend();
-                          getAccuracy();
-                      }
-                  }
-              }
-      );
+    // Listener for compareButton
+    compareButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            // if compare button pressed already then don't send data to the backend ~
+            // Compare
+            // button changes onSuccessfulResponse
+            // @TODO might be a better way of implementing this ~ could also cause problems
+            if (!compareClicked) {
+              sendTrackingDataToBackend();
+              getAccuracy();
+            }
+          }
+        });
   }
-
 
   private void resetTimer() {
     // Stop the timer and location updates if running
@@ -221,8 +224,6 @@ public class MainActivity extends AppCompatActivity {
             }
           }
 
-
-
           @Override
           public void onFailure(Call<Void> call, Throwable t) {
             // Handle network error
@@ -240,34 +241,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Create the CalculateAccuracyRequest object
-    CalculateAccuracyRequest accuracyRequest = new CalculateAccuracyRequest(
-            FootBallRoute,
-            trackingData.getX_coordinates(),
-            trackingData.getY_coordinates()
-    );
+    CalculateAccuracyRequest accuracyRequest =
+        new CalculateAccuracyRequest(
+            FootBallRoute, trackingData.getX_coordinates(), trackingData.getY_coordinates());
 
     // Make the Retrofit call
     Call<CalculateAccuracyResponse> call = apiService.calculateAccuracy(accuracyRequest);
-    call.enqueue(new Callback<CalculateAccuracyResponse>() {
-      @Override
-      public void onResponse(Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
-        if (response.isSuccessful() && response.body() != null) {
-          double accuracyScore = response.body().getAccuracyScore(); // Ensure this getter exists
-          // Update the compareClicked flag
-          compareClicked = true;
-          accuracyResponse = new CalculateAccuracyResponse(accuracyScore);
-        } else {
-          // Handle unsuccessful responses
-          Toast.makeText(MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT).show();
-        }
-      }
+    call.enqueue(
+        new Callback<CalculateAccuracyResponse>() {
+          @Override
+          public void onResponse(
+              Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
+            if (response.isSuccessful() && response.body() != null) {
+              double accuracyScore =
+                  response.body().getAccuracyScore(); // Ensure this getter exists
+              // Update the compareClicked flag
+              compareClicked = true;
+              accuracyResponse = new CalculateAccuracyResponse(accuracyScore);
+            } else {
+              // Handle unsuccessful responses
+              Toast.makeText(
+                      MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT)
+                  .show();
+            }
+          }
 
-      @Override
-      public void onFailure(Call<CalculateAccuracyResponse> call, Throwable t) {
-        // Handle network or conversion errors
-        Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-      }
-    });
+          @Override
+          public void onFailure(Call<CalculateAccuracyResponse> call, Throwable t) {
+            // Handle network or conversion errors
+            Toast.makeText(
+                    MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT)
+                .show();
+          }
+        });
   }
 
   // Runnable for updating the timer every second
