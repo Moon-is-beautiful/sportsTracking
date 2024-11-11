@@ -3,6 +3,8 @@ import math
 import numpy as np
 from dtaidistance import dtw_ndim
 
+# TODO:  address edge cases for directionality
+
 
 def compareRoutes(
     userX: list, userY: list, expectedX: list, expectedY: list

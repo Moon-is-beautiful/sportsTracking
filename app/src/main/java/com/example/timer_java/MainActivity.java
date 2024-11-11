@@ -1,5 +1,7 @@
 package com.example.timer_java;
 
+// TODO: make the UI cleaner
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
