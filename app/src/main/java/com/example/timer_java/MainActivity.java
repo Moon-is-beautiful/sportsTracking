@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     Retrofit retrofit =
         new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5000/") // url for testing on emulator
+            .baseUrl("http://10.0.2.2:80/") // url for testing on emulator
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

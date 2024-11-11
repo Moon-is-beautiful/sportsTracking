@@ -130,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
           @Override
           public void onResponse(
               Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-            if (response.isSuccessful()) {
+//            if (response.isSuccessful()) {
+            if(response.body() != null && response.body().getAuthentication()){
               // Login successful
               Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
@@ -138,7 +139,9 @@ public class LoginActivity extends AppCompatActivity {
               Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
               startActivity(intent);
               finish(); // Close the login activity
-            } else {
+            }
+            //TODO: There's a problem where user can get to next page even though they aren't logged in
+            else {
               // Handle unsuccessful response (e.g., invalid credentials)
               Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT)
                   .show();
@@ -162,26 +165,19 @@ public class LoginActivity extends AppCompatActivity {
           @Override
           public void onResponse(
               Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-            // Login successful
+            if (response.isSuccessful()) {
+              // Login successful
               Toast.makeText(LoginActivity.this, "Successfully created account", Toast.LENGTH_SHORT).show();
 
               // Redirect to MainActivity
               Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
               startActivity(intent);
               finish(); // Close the login activity
-//            if (response.isSuccessful()) {
-//              // Login successful
-//              Toast.makeText(LoginActivity.this, "Successfully created account", Toast.LENGTH_SHORT).show();
-//
-//              // Redirect to MainActivity
-//              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
-//              startActivity(intent);
-//              finish(); // Close the login activity
-//            } else {
-//              // Handle unsuccessful response (e.g., invalid credentials)
-//              Toast.makeText(LoginActivity.this, "Unable to create account", Toast.LENGTH_SHORT)
-//                  .show();
-//            }
+            } else {
+              // Handle unsuccessful response (e.g., invalid credentials)
+              Toast.makeText(LoginActivity.this, "Unable to create account", Toast.LENGTH_SHORT)
+                  .show();
+            }
           }
 
           @Override
