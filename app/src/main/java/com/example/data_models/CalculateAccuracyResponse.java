@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class CalculateAccuracyResponse {
-  @SerializedName("Accuracy Score")
+  @SerializedName("accuracyScore")
   private double accuracyScore;
   public CalculateAccuracyResponse(
          double accuracy){

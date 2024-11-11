@@ -28,7 +28,7 @@ public class OptionsPage extends AppCompatActivity {
 
         // Example options with names and image paths
         HashMap<String, Integer> options = new HashMap<>();
-        options.put("Option 1", R.drawable.hitch); // Replace with your image resources
+        options.put("Hitch", R.drawable.hitch); // Replace with your image resources
         options.put("Option 2", R.drawable.hitch);
         options.put("Option 3", R.drawable.hitch);
         options.put("Option 4", R.drawable.hitch);

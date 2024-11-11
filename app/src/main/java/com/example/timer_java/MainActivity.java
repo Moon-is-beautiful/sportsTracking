@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,6 +52,17 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    // Retrieve the selected option from Intent
+    Intent intent = getIntent();
+    if (intent != null && intent.hasExtra("selectedOption")) {
+      FootBallRoute = intent.getStringExtra("selectedOption");
+      Log.d("MainActivity", "Selected Football Route: " + FootBallRoute);
+    } else {
+      Toast.makeText(this, "No Football Route selected", Toast.LENGTH_SHORT).show();
+      // Optionally, redirect back to OptionsPage or handle accordingly
+    }
+
 
     // Find views
     timerTextView = findViewById(R.id.timerTextView);
@@ -131,11 +143,9 @@ public class MainActivity extends AppCompatActivity {
                       //if compare button pressed already then don't send data to the backend ~ Compare button changes onSuccessfulResponse
                       //@TODO might be a better way of implementing this ~ could also cause problems
                       if(!compareClicked){
-                          sendTrackingDataToBackend();
-                          getAccuracy();
-                          Intent intent = new Intent(MainActivity.this, AccPage.class);
-                          //intent.putExtra("accuracy", accuracyResponse.getAccuracyScore());
-                          startActivity(intent);
+                        compareClicked = true; // Set immediately to prevent multiple clicks
+                        sendTrackingDataToBackend();
+                        getAccuracy(); // Navigation will occur inside this method
                       }
                   }
               }
@@ -238,9 +248,10 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void getAccuracy() {
-    // Ensure FootBallRoute is set
+    // Ensure footballRoute is set
     if (FootBallRoute == null || FootBallRoute.isEmpty()) {
       Toast.makeText(this, "Football Route not set", Toast.LENGTH_SHORT).show();
+      return; // Early exit
     }
 
     // Create the CalculateAccuracyRequest object
@@ -257,12 +268,16 @@ public class MainActivity extends AppCompatActivity {
       public void onResponse(Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
         if (response.isSuccessful() && response.body() != null) {
           double accuracyScore = response.body().getAccuracyScore(); // Ensure this getter exists
-          // Update the compareClicked flag
-          compareClicked = true;
-          accuracyResponse = new CalculateAccuracyResponse(accuracyScore);
+          // Start AccPage activity and pass the accuracy score
+          Intent intent = new Intent(MainActivity.this, AccPage.class);
+          intent.putExtra("accuracy", accuracyScore);
+          startActivity(intent);
+          finish(); // Optional: Close MainActivity if you don't want to return
         } else {
           // Handle unsuccessful responses
           Toast.makeText(MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT).show();
+          Log.e("GetAccuracyError", "Status Code: " + response.code());
+          compareClicked = false; // Reset flag to allow retry
         }
       }
 
@@ -270,9 +285,48 @@ public class MainActivity extends AppCompatActivity {
       public void onFailure(Call<CalculateAccuracyResponse> call, Throwable t) {
         // Handle network or conversion errors
         Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+        Log.e("GetAccuracyFailure", "Network error: ", t);
+        compareClicked = false; // Reset flag to allow retry
       }
     });
   }
+
+//  private void getAccuracy() {
+//    // Ensure FootBallRoute is set
+//    if (FootBallRoute == null || FootBallRoute.isEmpty()) {
+//      Toast.makeText(this, "Football Route not set", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    // Create the CalculateAccuracyRequest object
+//    CalculateAccuracyRequest accuracyRequest = new CalculateAccuracyRequest(
+//            FootBallRoute,
+//            trackingData.getX_coordinates(),
+//            trackingData.getY_coordinates()
+//    );
+//
+//    // Make the Retrofit call
+//    Call<CalculateAccuracyResponse> call = apiService.calculateAccuracy(accuracyRequest);
+//    call.enqueue(new Callback<CalculateAccuracyResponse>() {
+//      @Override
+//      public void onResponse(Call<CalculateAccuracyResponse> call, Response<CalculateAccuracyResponse> response) {
+//        if (response.isSuccessful() && response.body() != null) {
+//          double accuracyScore = response.body().getAccuracyScore(); // Ensure this getter exists
+//          // Update the compareClicked flag
+//          compareClicked = true;
+//          accuracyResponse = new CalculateAccuracyResponse(accuracyScore);
+//        } else {
+//          // Handle unsuccessful responses
+//          Toast.makeText(MainActivity.this, "Failed to retrieve accuracy score.", Toast.LENGTH_SHORT).show();
+//        }
+//      }
+//
+//      @Override
+//      public void onFailure(Call<CalculateAccuracyResponse> call, Throwable t) {
+//        // Handle network or conversion errors
+//        Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//      }
+//    });
+//  }
 
   // Runnable for updating the timer every second
   private Runnable timerRunnable =

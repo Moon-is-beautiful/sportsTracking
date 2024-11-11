@@ -1,27 +1,32 @@
 package com.example.data_models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class CalculateAccuracyRequest {
-  private String route_name;
+  @SerializedName("routeName")
+  private String routeName;
+  @SerializedName("x_coordinates")
   private List<Double> x_coordinates;
+  @SerializedName("y_coordinates")
   private List<Double> y_coordinates;
 
   // Constructor
   public CalculateAccuracyRequest(
       String route_name, List<Double> x_coordinates, List<Double> y_coordinates) {
-    this.route_name = route_name;
+    this.routeName = route_name;
     this.x_coordinates = x_coordinates;
     this.y_coordinates = y_coordinates;
   }
 
   // Getters and Setters
   public String getRoute_name() {
-    return route_name;
+    return routeName;
   }
 
   public void setRoute_name(String route_name) {
-    this.route_name = route_name;
+    this.routeName = route_name;
   }
 
   public List<Double> getX_coordinates() {

@@ -18,8 +18,17 @@ public class AccPage extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acc_page_layout);
+        double accuracy = 20;
+        
         Intent intent = getIntent();
-        String accuracy = "placeholder";//intent.getStringExtra("accuracy");
+        if (intent != null && intent.hasExtra("accuracy")) {
+            accuracy = intent.getDoubleExtra("accuracy", 0.0); // Retrieve as double
+            accuracyOutput = findViewById(R.id.percentAccuracy);
+            accuracyOutput.setText(String.format("%.2f", accuracy));
+        } else {
+            accuracyOutput = findViewById(R.id.percentAccuracy);
+            accuracyOutput.setText("No accuracy score received.");
+        }
 
 
         btn2 = (Button)findViewById(R.id.backButton);
@@ -28,7 +37,7 @@ public class AccPage extends Activity {
 
         tv_Output = (TextView)findViewById(R.id.outputLabel);
         accuracyOutput=(TextView)findViewById(R.id.percentAccuracy);
-        accuracyOutput.setText(accuracy);
+        accuracyOutput.setText(accuracyOutput.getText());
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override

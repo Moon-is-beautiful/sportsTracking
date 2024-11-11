@@ -99,11 +99,11 @@ def calculateAccuracy():
     # need to get the data document holding all the location information from the front-end
     data = request.get_json()
 
-    route_name = data.get("route name")
+    route_name = data.get("routeName")
 
     # need to separate the data into two lists: x-coordinates and y-coordinates
-    user_x_coordinates = data.get("x-coordinates", [])
-    user_y_coordinates = data.get("y-coordinates", [])
+    user_x_coordinates = data.get("x_coordinates", [])
+    user_y_coordinates = data.get("y_coordinates", [])
     # need to get the ideal location from the back-end
     routeData = database.getFootballRouteData(route_name)
     if not routeData:
