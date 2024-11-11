@@ -19,7 +19,7 @@ public class AccPage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acc_page_layout);
         double accuracy = 20;
-        
+
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("accuracy")) {
             accuracy = intent.getDoubleExtra("accuracy", 0.0); // Retrieve as double
