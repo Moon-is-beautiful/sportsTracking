@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     Retrofit retrofit =
             new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:5001/") // url for testing on emulator
+                    .baseUrl("http://10.0.2.2:80/") // url for testing on emulator
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -162,19 +162,26 @@ public class LoginActivity extends AppCompatActivity {
           @Override
           public void onResponse(
               Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-            if (response.isSuccessful()) {
-              // Login successful
-              Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+            // Login successful
+              Toast.makeText(LoginActivity.this, "Successfully created account", Toast.LENGTH_SHORT).show();
 
               // Redirect to MainActivity
               Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
               startActivity(intent);
               finish(); // Close the login activity
-            } else {
-              // Handle unsuccessful response (e.g., invalid credentials)
-              Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT)
-                  .show();
-            }
+//            if (response.isSuccessful()) {
+//              // Login successful
+//              Toast.makeText(LoginActivity.this, "Successfully created account", Toast.LENGTH_SHORT).show();
+//
+//              // Redirect to MainActivity
+//              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
+//              startActivity(intent);
+//              finish(); // Close the login activity
+//            } else {
+//              // Handle unsuccessful response (e.g., invalid credentials)
+//              Toast.makeText(LoginActivity.this, "Unable to create account", Toast.LENGTH_SHORT)
+//                  .show();
+//            }
           }
 
           @Override

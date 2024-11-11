@@ -22,19 +22,17 @@ def home():
 # takes information from the front-end and store it in the backend. Will call cipher.py to encrypt password and username
 @app.route("/createAccount", methods=["POST"])
 def createAccount():
-    newUserInfo = request.get_json()  # parse incoming json request data and return it
+    newUserInfo = request.get_json()
 
-    name = newUserInfo["name"]  # get the information from the key name
-    password = newUserInfo["password"]  # get the information from the key password
-    username = newUserInfo["username"]  # get the information from the key username
+    name = newUserInfo["name"]
+    password = newUserInfo["loginPassword"]
+    username = newUserInfo["loginUsername"]
 
-    # might change so that database uses the cipher.py functions instead of backend_app.py
-    # username = cipher.encrypt(username, 3, 2) # encrypt the username
-    password = cipher.encrypt_password(password)  # encrypt the password
+    password = cipher.encrypt_password(password)
 
-    database.createUser(name, username, password)  # put the user in our database
+    database.createUser(name, username, password)
 
-    return "Done", 201  # postman to check route integrity
+    return jsonify({"message": True}), 201
 
 
 # Function that triggers when API for logging in gets called
@@ -52,7 +50,7 @@ def login():
     password = cipher.encrypt_password(password)
 
     authentication = database.authenticateLogin(name, username, password)
-    return jsonify({"authentication": authentication})
+    return jsonify({"authentication": authentication}), 201
 
 
 # Function that will get the routes located in our database and load it into the front-end
@@ -120,8 +118,5 @@ def calculateAccuracy():
     return jsonify({"Accuracy Score": score}), 200
 
 
-# if __name__ == "__main__":
-# app.run(host="0.0.0.0", debug=false, port=os.environ.get("PORT", 5000))
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", debug=False, port=os.environ.get("PORT", 80))
