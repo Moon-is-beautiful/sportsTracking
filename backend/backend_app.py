@@ -120,5 +120,8 @@ def calculateAccuracy():
     return jsonify({"Accuracy Score": score}), 200
 
 
+# if __name__ == "__main__":
+# app.run(host="0.0.0.0", debug=false, port=os.environ.get("PORT", 5000))
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=False, port=os.environ.get("PORT", 80))
+    app.run(host="0.0.0.0", port=5001, debug=True)

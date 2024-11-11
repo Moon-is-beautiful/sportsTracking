@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     Retrofit retrofit =
             new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:5000/") // url for testing on emulator
+                    .baseUrl("http://10.0.2.2:5001/") // url for testing on emulator
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
