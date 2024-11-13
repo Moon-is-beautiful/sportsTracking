@@ -28,15 +28,24 @@ public class OptionsPage extends AppCompatActivity {
 
         // Example options with names and image paths
         HashMap<String, Integer> options = new HashMap<>();
-        options.put("Hitch", R.drawable.hitch); // Replace with your image resources
-        options.put("Option 2", R.drawable.hitch);
-        options.put("Option 3", R.drawable.hitch);
-        options.put("Option 4", R.drawable.hitch);
-        options.put("Option 5", R.drawable.hitch);
-        options.put("Option 6", R.drawable.hitch);
-        options.put("Option 7", R.drawable.hitch);
-        options.put("Option 8", R.drawable.hitch);
-        options.put("Option 4", R.drawable.hitch);
+        options.put("Comeback", R.drawable.comeback); // Replace with your image resources
+        options.put("Corner", R.drawable.corner);
+        options.put("Curl", R.drawable.curl);
+        options.put("Dig", R.drawable.dig);
+        options.put("Drag", R.drawable.drag);
+        options.put("Flat", R.drawable.flat);
+        options.put("Go", R.drawable.go);
+        options.put("Hitch", R.drawable.hitch);
+        options.put("Option", R.drawable.option);
+        options.put("Post", R.drawable.post);
+        options.put("Post Corner", R.drawable.postcorner);
+        options.put("Quick Out", R.drawable.quickout);
+        options.put("Seam", R.drawable.seam);
+        options.put("Shallow Cross", R.drawable.shallowcross);
+        options.put("Slant", R.drawable.slant);
+        options.put("Square Out", R.drawable.squareout);
+        options.put("Stick", R.drawable.stick);
+        options.put("Whip", R.drawable.whip);
 
         for (String optionName : options.keySet()) {
             // Create a container for each option
