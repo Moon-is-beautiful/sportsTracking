@@ -4,6 +4,7 @@ import java.util.List;
 
 public class FootballRoute {
 	// class that is equivalent to the datamodel in mongoDB for football routes
+	private String routeName;
 	private List<Double> time;
 	private List<Integer> xCoordinates;
 	private List<Integer> yCoordinates;
@@ -36,5 +37,11 @@ public class FootballRoute {
 	}
 	public void setAdditionalInformation(String additionalInformation){
 		this.additionalInformation = additionalInformation;
+	}
+	public String getRouteName(){
+		return routeName;
+	}
+	public void setRouteName(String routeName) {
+		this.routeName = routeName;
 	}
 }

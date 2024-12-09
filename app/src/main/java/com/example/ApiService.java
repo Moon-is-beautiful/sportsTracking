@@ -1,6 +1,9 @@
 package com.example;
 
 import com.example.data_models.*;
+
+import java.util.Map;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,6 +17,9 @@ public interface ApiService{
 
   @POST("/login")
   Call<AuthenticationResponse> login(@Body LoginRequest loginRequest);
+
+  @POST("/calibrateAngle")
+  Call<TrackingAngle> calibrateAngle(@Body Map<String, Object> requestBody);
 
   @GET("/getFootballRoute")
   Call<FootballRoute> getFootballRoute(@Query("routeName") String routeName);

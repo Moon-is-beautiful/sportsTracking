@@ -11,13 +11,16 @@ public class CalculateAccuracyRequest {
   private List<Double> x_coordinates;
   @SerializedName("y_coordinates")
   private List<Double> y_coordinates;
+  @SerializedName("angle")
+  private Double angle;
 
   // Constructor
   public CalculateAccuracyRequest(
-      String route_name, List<Double> x_coordinates, List<Double> y_coordinates) {
+      String route_name, List<Double> x_coordinates, List<Double> y_coordinates, double calibratedAngle) {
     this.routeName = route_name;
     this.x_coordinates = x_coordinates;
     this.y_coordinates = y_coordinates;
+    this.angle = calibratedAngle;
   }
 
   // Getters and Setters

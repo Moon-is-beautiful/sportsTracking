@@ -72,7 +72,7 @@ public class OptionsPage extends AppCompatActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT
             ));
             imageView.setImageResource(options.get(optionName));
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(2, 2, 2, 2);
 
             // Add text to the option
             TextView textView = new TextView(this);
@@ -105,7 +105,7 @@ public class OptionsPage extends AppCompatActivity {
         // Confirm button action
         confirmButton.setOnClickListener(v -> {
             if (selectedOption != null) {
-                Intent intent = new Intent(OptionsPage.this, MainActivity.class);
+                Intent intent = new Intent(OptionsPage.this, CalibratePage.class);
                 intent.putExtra("selectedOption", selectedOption);
                 startActivity(intent);
             }

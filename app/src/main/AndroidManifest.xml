@@ -45,6 +45,8 @@
         <activity
             android:name=".IntroPage"
             android:exported="true" />
-
+        <activity
+            android:name=".CalibratePage"
+            android:exported="true" />
     </application>
 </manifest>

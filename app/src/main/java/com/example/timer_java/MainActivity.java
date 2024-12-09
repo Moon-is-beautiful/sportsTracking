@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
   private TrackingData trackingData;
   private String FootBallRoute;
+  private double angle;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
       // Optionally, redirect back to OptionsPage or handle accordingly
     }
 
+    angle = intent.getDoubleExtra("calibratedAngle", 0.0);
 
     // Find views
     timerTextView = findViewById(R.id.timerTextView);
@@ -260,7 +262,8 @@ public class MainActivity extends AppCompatActivity {
     CalculateAccuracyRequest accuracyRequest = new CalculateAccuracyRequest(
             FootBallRoute,
             trackingData.getX_coordinates(),
-            trackingData.getY_coordinates()
+            trackingData.getY_coordinates(),
+            angle
     );
 
     // Make the Retrofit call
