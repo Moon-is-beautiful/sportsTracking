@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ApiService;
@@ -20,173 +21,89 @@ public class LoginActivity extends AppCompatActivity {
   private EditText login_nameEditText;
   private EditText login_usernameEditText;
   private EditText login_passwordEditText;
-  private EditText create_nameEditText;
-  private EditText create_usernameEditText;
-  private EditText create_passwordEditText;
-
-  private ApiService apiService; // Declare ApiService as an instance variable
+  private ApiService apiService;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Retrofit retrofit =
             new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:80/") // url for testing on emulator
+                    .baseUrl("http://10.0.2.2:80/") // URL for testing on emulator
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
     apiService = retrofit.create(ApiService.class);
 
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_login); // Use the layout for the login screen
-
-    create_nameEditText = findViewById(R.id.nameEditTextR);
-    create_usernameEditText = findViewById(R.id.usernameEditTextR);
-    create_passwordEditText = findViewById(R.id.passwordEditTextR);
+    setContentView(R.layout.activity_login);
 
     login_nameEditText = findViewById(R.id.nameEditText);
     login_usernameEditText = findViewById(R.id.usernameEditText);
     login_passwordEditText = findViewById(R.id.passwordEditText);
 
     Button loginButton = findViewById(R.id.loginButton);
-    Button registerButton = findViewById(R.id.RegisterButton);
+    TextView registerLink = findViewById(R.id.registerLink);
 
     loginButton.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            // TODO: Add login conditions here (like checking username/password)
-            String name = login_nameEditText.getText().toString().trim();
-            String username = login_usernameEditText.getText().toString().trim();
-            String password = login_passwordEditText.getText().toString().trim();
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                String name = login_nameEditText.getText().toString().trim();
+                String username = login_usernameEditText.getText().toString().trim();
+                String password = login_passwordEditText.getText().toString().trim();
 
-            // check if any of the inputs are empty
-            if (name.isEmpty()) {
-              login_nameEditText.setError("Name is required");
-              login_nameEditText.requestFocus();
-              return;
-            }
-            if (username.isEmpty()) {
-              login_usernameEditText.setError("Username is required");
-              login_usernameEditText.requestFocus();
-              return;
-            }
-            if (password.isEmpty()) {
-              login_passwordEditText.setError("Password is required");
-              login_passwordEditText.requestFocus();
-              return;
-            }
+                if (name.isEmpty()) {
+                  login_nameEditText.setError("Name is required");
+                  login_nameEditText.requestFocus();
+                  return;
+                }
+                if (username.isEmpty()) {
+                  login_usernameEditText.setError("Username is required");
+                  login_usernameEditText.requestFocus();
+                  return;
+                }
+                if (password.isEmpty()) {
+                  login_passwordEditText.setError("Password is required");
+                  login_passwordEditText.requestFocus();
+                  return;
+                }
 
-            LoginRequest loginInfo = new LoginRequest(name, username, password);
-            verifyLogin(loginInfo);
+                LoginRequest loginInfo = new LoginRequest(name, username, password);
+                verifyLogin(loginInfo);
+              }
+            });
 
-            // If login is successful, redirect to MainActivity
-            Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
-            startActivity(intent);
-            finish(); // Close the login activity so the user cannot return to it
-          }
-        });
-
-    registerButton.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            // TODO: Add login conditions here (like checking username/password)
-            String name = create_nameEditText.getText().toString().trim();
-            String username = create_usernameEditText.getText().toString().trim();
-            String password = create_passwordEditText.getText().toString().trim();
-
-            // check if any of the inputs are empty
-            if (name.isEmpty()) {
-              create_nameEditText.setError("Name is required");
-              create_nameEditText.requestFocus();
-              return;
-            }
-            if (username.isEmpty()) {
-              create_usernameEditText.setError("Username is required");
-              create_usernameEditText.requestFocus();
-              return;
-            }
-            if (password.isEmpty()) {
-              create_passwordEditText.setError("Password is required");
-              create_passwordEditText.requestFocus();
-              return;
-            }
-
-            LoginRequest newUserInfo = new LoginRequest(name, username, password);
-            createAccount(newUserInfo);
-
-            // If login is successful, redirect to MainActivity
-            Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
-            startActivity(intent);
-            finish(); // Close the login activity so the user cannot return to it
-          }
-        });
+    registerLink.setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+              }
+            });
   }
 
   private void verifyLogin(LoginRequest loginInfo) {
     Call<AuthenticationResponse> call = apiService.login(loginInfo);
     call.enqueue(
-        new Callback<AuthenticationResponse>() {
-          @Override
-          public void onResponse(
-              Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-//            if (response.isSuccessful()) {
-            if(response.body() != null && response.body().getAuthentication()){
-              // Login successful
-              Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+            new Callback<AuthenticationResponse>() {
+              @Override
+              public void onResponse(
+                      Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
+                if (response.body() != null && response.body().getAuthentication()) {
+                  Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-              // Redirect to MainActivity
-              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
-              startActivity(intent);
-              finish(); // Close the login activity
-            }
-            //TODO: There's a problem where user can get to next page even though they aren't logged in
-            else {
-              // Handle unsuccessful response (e.g., invalid credentials)
-              Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT)
-                  .show();
-            }
-          }
+                  Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
+                  startActivity(intent);
+                  finish();
+                } else {
+                  Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+                }
+              }
 
-          @Override
-          public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-            // Handle network failure or other errors
-            Toast.makeText(
-                    LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT)
-                .show();
-          }
-        });
-  }
-
-  private void createAccount(LoginRequest newUserInfo) {
-    Call<AuthenticationResponse> call = apiService.createAccount(newUserInfo);
-    call.enqueue(
-        new Callback<AuthenticationResponse>() {
-          @Override
-          public void onResponse(
-              Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-            if (response.isSuccessful()) {
-              // Login successful
-              Toast.makeText(LoginActivity.this, "Successfully created account", Toast.LENGTH_SHORT).show();
-
-              // Redirect to MainActivity
-              Intent intent = new Intent(LoginActivity.this, OptionsPage.class);
-              startActivity(intent);
-              finish(); // Close the login activity
-            } else {
-              // Handle unsuccessful response (e.g., invalid credentials)
-              Toast.makeText(LoginActivity.this, "Unable to create account", Toast.LENGTH_SHORT)
-                  .show();
-            }
-          }
-
-          @Override
-          public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-            // Handle network failure or other errors
-            Toast.makeText(
-                    LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT)
-                .show();
-          }
-        });
+              @Override
+              public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+              }
+            });
   }
 }

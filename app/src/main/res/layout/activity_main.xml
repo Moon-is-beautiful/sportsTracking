@@ -35,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/BurntOrange"
-            android:text="Start"
-            app:cornerRadius="0dp"/>
+            android:text="Start" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/resetButton"
@@ -44,8 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/BurntOrange"
-            android:text="Reset"
-            app:cornerRadius="0dp"/>
+            android:text="Reset" />
 
     </LinearLayout>
     <LinearLayout
@@ -61,8 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/BurntOrange"
-            android:text="Compare"
-            app:cornerRadius="0dp"/>
+            android:text="Compare" />
     </LinearLayout>
 
 </RelativeLayout>

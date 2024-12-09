@@ -20,10 +20,10 @@
         </GridLayout>
     </ScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirm"
-        android:textColor="@color/black" />
+        android:backgroundTint="@color/BurntOrange" />
 </LinearLayout>
